@@ -55,7 +55,7 @@ namespace Serialize
 		if (nullptr == mData)
 			return false;
 
-		if ((getFlags() | READ_ONLY) == 0 && (mSeekPosition + byteLength) <= mSize)
+		if ((getFlags() & READ_ONLY) == 0 && (mSeekPosition + byteLength) <= mSize)
 		{
 			memcpy(&((char*)mData)[mSeekPosition], data, byteLength);
 			mSeekPosition += byteLength;
