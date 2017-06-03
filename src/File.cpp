@@ -1,6 +1,8 @@
 #include <Serialize/File.h>
 
-#define _CRT_SECURE_NO_WARNINGS
+#ifndef _CRT_SECURE_NO_WARNINGS
+#	define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <climits>
 #include <cstdio>
@@ -10,7 +12,6 @@ namespace Serialize
 	File::File()
 		: mFile(nullptr)
 	{
-
 	}
 
 	File::File(const char* path, bool readonly)
