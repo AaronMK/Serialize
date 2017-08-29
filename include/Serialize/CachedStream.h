@@ -13,7 +13,7 @@ namespace Resource
 	 *
 	 * Once created, cached streams are not dependent on the original stream.
 	 */
-	class RESOURCE_CLASS_EXPORT CachedStream : public ByteStream
+	class SERIALIZE_EXPORT CachedStream : public ByteStream
 	{
 	public:
 		/**
