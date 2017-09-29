@@ -33,14 +33,14 @@ namespace Serialize
 
 		virtual void* dataPtr(seek_t seekPos) const override;
 
-		virtual bool readRaw(void* destination, bytesize_t byteLength) override;
-		virtual bool writeRaw(const void* data, bytesize_t byteLength) override;
-		virtual bool seek(seek_t position) override;
+		virtual void readRaw(void* destination, bytesize_t byteLength) override;
+		virtual void writeRaw(const void* data, bytesize_t byteLength) override;
+		virtual void seek(seek_t position) override;
 		virtual seek_t getSeekPosition() const override;
 		virtual bytesize_t bytesAvailable() const override;
 		virtual bool canRead(bytesize_t numBytes) override;
 		virtual bool canWrite(bytesize_t numBytes, bool autoExpand = false) override;
-		virtual bool clear() override;
+		virtual void clear() override;
 
 	private:
 		bytesize_t mSize;

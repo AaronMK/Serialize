@@ -1,4 +1,5 @@
 #include <Serialize/ProxyStream.h>
+#include <Serialize/Exceptions.h>
 
 #include <algorithm>
 
@@ -80,53 +81,54 @@ namespace Serialize
 
 	void* ProxyStream::dataPtr(seek_t seekPos) const
 	{
-		if (nullptr == mStream || seekPos >= mSize)
-			return nullptr;
+		if (nullptr == mStream)
+			throw InvalidOperation("Attempting to write on an uninitialized ProxyStream.");
+
+		if (seekPos >= mSize)
+			throw OutOfBounds();
 
 		return mStream->dataPtr(seekPos + mSeekOffset);
 	}
 
-	bool ProxyStream::readRaw(void* destination, bytesize_t byteLength)
+	void ProxyStream::readRaw(void* destination, bytesize_t byteLength)
 	{
-		if (nullptr == mStream || (mLocalSeek + byteLength) > mSize)
-			return false;
+		if (nullptr == mStream)
+			throw InvalidOperation("Attempting to read on an uninitialized ProxyStream.");
+
+		if ((mLocalSeek + byteLength) > mSize)
+			throw OutOfBounds();
 
 		SeekBackup seekBack(mStream);
+		
 		mStream->seek(mSeekOffset + mLocalSeek);
-
-		if (mStream->readRaw(destination, byteLength))
-		{
-			mLocalSeek += byteLength;
-			return true;
-		}
-
-		return false;
+		mStream->readRaw(destination, byteLength);
+		mLocalSeek += byteLength;
 	}
 
-	bool ProxyStream::writeRaw(const void* data, bytesize_t byteLength)
+	void ProxyStream::writeRaw(const void* data, bytesize_t byteLength)
 	{
-		if (nullptr == mStream || (mLocalSeek + byteLength) > mSize)
-			return false;
+		if (nullptr == mStream)
+			throw InvalidOperation("Attempting to write on an uninitialized ProxyStream.");
+
+		if ((mLocalSeek + byteLength) > mSize)
+			throw OutOfBounds();
 
 		SeekBackup seekBack(mStream);
+
 		mStream->seek(mSeekOffset + mLocalSeek);
-
-		if (mStream->writeRaw(data, byteLength))
-		{
-			mLocalSeek += byteLength;
-			return true;
-		}
-
-		return false;
+		mStream->writeRaw(data, byteLength);
+		mLocalSeek += byteLength;
 	}
 
-	bool ProxyStream::seek(seek_t position)
+	void ProxyStream::seek(seek_t position)
 	{
-		if (nullptr == mStream || position >= mSize)
-			return false;
+		if (nullptr == mStream)
+			throw InvalidOperation("Attempting to seek on an uninitialized ProxyStream.");
+			
+		if (position >= mSize)
+			throw OutOfBounds();
 
 		mLocalSeek = position;
-		return true;
 	}
 
 	seek_t ProxyStream::getSeekPosition() const
@@ -173,11 +175,11 @@ namespace Serialize
 		return mStream->canWrite(numBytes, autoExpand);
 	}
 
-	bool ProxyStream::clear()
+	void ProxyStream::clear()
 	{
 		if (nullptr == mStream)
-			return false;
+			throw InvalidOperation("Attempting to clear on an uninitialized ProxyStream.");
 
-		return seek(0);
+		seek(0);
 	}
 }

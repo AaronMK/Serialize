@@ -1,9 +1,15 @@
 #include <Serialize/File.h>
+#include <Serialize/Exceptions.h>
 
-#define _CRT_SECURE_NO_WARNINGS
+#ifndef _CRT_SECURE_NO_WARNINGS
+#	define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <climits>
 #include <cstdio>
+#include <stdexcept>
+
+using namespace std;
 
 namespace Serialize
 {
@@ -30,65 +36,54 @@ namespace Serialize
 		close();
 	}
 
-	bool File::readRaw(void* destination, bytesize_t byteLength)
+	void File::readRaw(void* destination, bytesize_t byteLength)
 	{
-		if (nullptr == mFile)
-			return false;
+		if (0 == byteLength)
+			return;
 
-		seek_t backSeek = getSeekPosition();
+		if ((getFlags() | WRITE_ONLY) != 0)
+			throw OutOfBounds();
+
+		if (nullptr == mFile)
+			throw InvalidOperation("Attempting to read on an unopened file.");
 
 		size_t byteCount = byteLength;
-		size_t elementsRead;
+		size_t elementsRead = fread(destination, byteCount, 1, mFile);
 
-		if (destination)
-			elementsRead = fread(destination, byteCount, 1, mFile);
-		else
-			elementsRead = seek(getSeekPosition() + byteLength) ? 1 : 0;
-
-		if (elementsRead >= 1)
+		if (elementsRead != byteCount)
 		{
-			return true;
-		}
-		else
-		{
-			seek(backSeek);
-			return false;
+			if (0 != feof(mFile))
+				throw OutOfBounds("Attempted to read passed the end of the file.");
+			else
+				throw std::runtime_error("Unknown file error.");
 		}
 	}
 
-	bool File::writeRaw(const void* data, bytesize_t byteLength)
+	void File::writeRaw(const void* data, bytesize_t byteLength)
 	{
 		if (nullptr == mFile)
-			return false;
+			throw InvalidOperation("Attempting to write on an unopened file.");
 
-		seek_t backSeek = getSeekPosition();
+		if ((getFlags() | READ_ONLY) != 0)
+			throw InvalidOperation("Attempting to write on a read only stream.");
 
 		size_t byteCount = byteLength;
 		size_t elementsWritten = fwrite(data, byteCount, 1, mFile);
 
-		if (elementsWritten >= 1)
+		if (elementsWritten != byteCount)
 		{
-			return true;
-		}
-		else
-		{
-			seek(backSeek);
-			return false;
+			if (0 != feof(mFile))
+				throw OutOfBounds("Attempted to write passed the end of the file.");
+			else
+				throw std::runtime_error("Unknown file error.");
 		}
 	}
 
-	bool File::seek(seek_t position)
+	void File::seek(seek_t position)
 	{
-		if (nullptr == mFile)
-			return false;
-
 		// Check for overflow
-		if (position > (int64_t)std::numeric_limits<long>::max())
-		{
-			return false;
-		}
-
-		return ( 0 == fseek(mFile, (long)position, SEEK_SET) );
+		if (position > (int64_t)std::numeric_limits<long>::max() || 0 != fseek(mFile, (long)position, SEEK_SET))
+			throw OutOfBounds("Attempted to seek outside the bounds of the file.");
 	}
 
 	seek_t File::getSeekPosition() const
@@ -147,20 +142,18 @@ namespace Serialize
 	}
 
 
-	bool File::clear()
+	void File::clear()
 	{
-		if ( nullptr != mFile && (0 == (getFlags() | READ_ONLY)) )
+		if (0 != (getFlags() | READ_ONLY))
+			throw InvalidOperation("Attampting to clear a read-only file stream.");
+
+		if ( nullptr != mFile )
 		{
 			FILE* reopenedFile;
 
 			if (0 == freopen_s(&reopenedFile, nullptr, "w+", mFile))
-			{
 				mFile = reopenedFile;
-				return true;
-			}
 		}
-
-		return false;
 	}
 
 	bool File::open(const char* path, bool readonly)

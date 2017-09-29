@@ -1,6 +1,10 @@
 #include <Serialize/ByteStream.h>
+#include <Serialize/Exceptions.h>
 
 #include <assert.h>
+
+
+using namespace std;
 
 namespace Serialize
 {
@@ -21,11 +25,17 @@ namespace Serialize
 
 	void* ByteStream::dataPtr(seek_t seekPos) const
 	{
-		// This will fail if the stream is marked as being
-		// memory backed, but does not override dataPtr.
-		assert(0 == (getFlags() & MEMORY_BACKED));
+		throw InvalidOperation("Stream does support direct addressing of data.");
+	}
 
-		return nullptr;
+	void ByteStream::readRaw(void * destination, bytesize_t byteLength)
+	{
+		throw InvalidOperation("Stream does not support reading.");
+	}
+
+	void ByteStream::writeRaw(const void * data, bytesize_t byteLength)
+	{
+		throw InvalidOperation("Stream does not support writing.");
 	}
 
 	uint32_t ByteStream::getFlags() const

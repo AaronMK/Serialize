@@ -1,4 +1,7 @@
 #include <Serialize/MemoryStream.h>
+#include <Serialize/Exceptions.h>
+
+using namespace std;
 
 namespace Serialize
 {
@@ -14,9 +17,24 @@ namespace Serialize
 
 	MemoryStream::MemoryStream(const void* beginning, bytesize_t size)
 	{
+		if (nullptr == beginning)
+			throw std::invalid_argument("Parameter beginning cannot be null.");
+
 		setFlags(MEMORY_BACKED | CAN_SEEK);
 
 		mData = const_cast<void*>(beginning);
+		mSize = (nullptr != mData) ? size : 0;
+		mSeekPosition = 0;
+	}
+
+	MemoryStream::MemoryStream(void * beginning, bytesize_t size, Flags flags)
+	{
+		if (nullptr == beginning)
+			throw std::invalid_argument("Parameter beginning cannot be null.");
+
+		setFlags(MEMORY_BACKED | CAN_SEEK | flags);
+
+		mData = beginning;
 		mSize = (nullptr != mData) ? size : 0;
 		mSeekPosition = 0;
 	}
@@ -27,16 +45,19 @@ namespace Serialize
 
 	void* MemoryStream::dataPtr(seek_t seekPos) const
 	{
-		if (nullptr == mData || seekPos >= mSize)
-			return nullptr;
+		if (nullptr == mData)
+			throw InvalidOperation("Attempting to access an uninitialized MemoryStream.");
+
+		if (seekPos >= mSize)
+			throw OutOfBounds("Attempting to seek outside the bounds of a MemoryStream.");
 
 		return (char*)mData + seekPos;
 	}
 
-	bool MemoryStream::readRaw(void* destination, bytesize_t byteLength)
+	void MemoryStream::readRaw(void* destination, bytesize_t byteLength)
 	{
 		if (nullptr == mData)
-			return false;
+			throw InvalidOperation("Attempting to read on an uninitialized MemoryStream.");
 		
 		if ((mSeekPosition + byteLength) <= mSize)
 		{
@@ -44,39 +65,36 @@ namespace Serialize
 				memcpy(destination, &((char*)mData)[mSeekPosition], byteLength);
 			
 			mSeekPosition += byteLength;
-			return true;
 		}
 
-		return false;
+		throw OutOfBounds("Attempted to read passed the end of the MemoryStream.");
 	}
 
-	bool MemoryStream::writeRaw(const void* data, bytesize_t byteLength)
+	void MemoryStream::writeRaw(const void* data, bytesize_t byteLength)
 	{
 		if (nullptr == mData)
-			return false;
+			throw InvalidOperation("Attempting to write on an uninitialized MemoryStream.");
 
-		if ((getFlags() & READ_ONLY) == 0 && (mSeekPosition + byteLength) <= mSize)
-		{
-			memcpy(&((char*)mData)[mSeekPosition], data, byteLength);
-			mSeekPosition += byteLength;
-			return true;
-		}
+		if ((getFlags() & READ_ONLY) != 0)
+			throw InvalidOperation("Attempting to write on a readonly stream.");
 
-		return false;
+
+		if ((mSeekPosition + byteLength) > mSize)
+			throw OutOfBounds("Attempted to write passed the end of the MemoryStream.");
+
+		memcpy(&((char*)mData)[mSeekPosition], data, byteLength);
+		mSeekPosition += byteLength;
 	}
 
-	bool MemoryStream::seek(seek_t position)
+	void MemoryStream::seek(seek_t position)
 	{
 		if (nullptr == mData)
-			return false;
+			throw InvalidOperation("Attempting to seek on an uninitialized MemoryrStream.");
 
-		if (position < mSize)
-		{
-			mSeekPosition = position;
-			return true;
-		}
+		if (position >= mSize)
+			throw OutOfBounds("Attempted to sek passed the end of the MemoryStream.");
 
-		return false;
+		mSeekPosition = position;
 	}
 	
 	seek_t MemoryStream::getSeekPosition() const
@@ -106,17 +124,11 @@ namespace Serialize
 		return ((getFlags() | READ_ONLY) == 0) ? ((mSeekPosition + numBytes) <= mSize) : false;
 	}
 
-	bool MemoryStream::clear()
+	void MemoryStream::clear()
 	{
-		if (nullptr == mData)
-			return false;
+		if ((getFlags() | READ_ONLY) != 0)
+			throw InvalidOperation("Attepmted to clear a read-only stream.");
 
-		if ((getFlags() | READ_ONLY) == 0)
-		{
-			seek(0);
-			return true;
-		}
-
-		return false;
+		seek(0);
 	}
 }

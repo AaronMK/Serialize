@@ -1,4 +1,5 @@
 #include <Serialize/TestByteStream.h>
+#include <Serialize/Exceptions.h>
 
 #include <algorithm>
 
@@ -12,30 +13,20 @@ namespace Serialize
 
 	TestByteStream::~TestByteStream()
 	{
-
 	}
 
-	bool TestByteStream::readRaw(void* destination, bytesize_t byteLength)
-	{
-		return false;
-	}
-
-	bool TestByteStream::writeRaw(const void* data, bytesize_t byteLength)
+	void TestByteStream::writeRaw(const void* data, bytesize_t byteLength)
 	{
 		mSeekPosition += byteLength;
 		mMaxSeek = std::max(mMaxSeek, mSeekPosition);
-		return true;
 	}
 
-	bool TestByteStream::seek(seek_t position)
+	void TestByteStream::seek(seek_t position)
 	{
 		if (position < mMaxSeek)
-		{
 			mSeekPosition = position;
-			return true;
-		}
-
-		return false;
+		else
+			throw OutOfBounds();
 	}
 
 	seek_t TestByteStream::getSeekPosition() const
@@ -58,10 +49,9 @@ namespace Serialize
 		return true;
 	}
 
-	bool TestByteStream::clear()
+	void TestByteStream::clear()
 	{
 		mSeekPosition = 0;
 		mMaxSeek = 0;
-		return true;
 	}
 }

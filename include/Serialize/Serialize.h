@@ -1,11 +1,14 @@
 #ifndef _SERIALIZE_H_
 #define _SERIALIZE_H_
 
-#include "ByteStream.h"
 #include "Types.h"
 
+#include <type_traits>
+#include <exception>
 #include <cassert>
 #include <string>
+#include <tuple>
+
 
 /**
  * Adding Support for New Datatypes
@@ -107,6 +110,8 @@
  */
 namespace Serialize
 {
+	class ByteStream;
+
 	/**
 	 * @brief
 	 *  Reads data from the passed stream and de-serializes that data into a T value
@@ -125,15 +130,16 @@ namespace Serialize
 	 *  implementation will be compiled and generate an error. 
 	 */
 	template<typename T>
-	bool read(ByteStream* stream, T *out)
+	void read(ByteStream* stream, T *out)
 	{
 		// Read needs to be specialized for the type.
 		assert(false);
 
 		// This function should generate a compile error of
-		// not returning a value if the compiler ever tries
+		// returning a value if the compiler ever tries
 		// use it, which would indicate no specialization
 		// being available.
+		return 1;
 	}
 
 	/**
@@ -147,16 +153,76 @@ namespace Serialize
 	 *  implementation will be compiled and generate an error.
 	 */
 	template<typename T>
-	bool write(ByteStream* stream, const T &val)
+	void write(ByteStream* stream, const T &val)
 	{
 		// Write needs to be specialized for the type.
 		assert(false);
 
 		// This function should generate a compile error of
-		// not returning a value if the compiler ever tries
+		// returning a value if the compiler ever tries
 		// use it, which would indicate no specialization
 		// being available.
 	}
+
+	template<>
+	SERIALIZE_EXPORT void read<bool>(ByteStream* stream, bool *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<bool>(ByteStream* stream, const bool &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<uint8_t>(ByteStream* stream, uint8_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<uint8_t>(ByteStream* stream, const uint8_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<uint16_t>(ByteStream* stream, uint16_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<uint16_t>(ByteStream* stream, const uint16_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<uint32_t>(ByteStream* stream, uint32_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<uint32_t>(ByteStream* stream, const uint32_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<int8_t>(ByteStream* stream, int8_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<int8_t>(ByteStream* stream, const int8_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<int16_t>(ByteStream* stream, int16_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<int16_t>(ByteStream* stream, const int16_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<int32_t>(ByteStream* stream, int32_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<int32_t>(ByteStream* stream, const int32_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<float32_t>(ByteStream* stream, float32_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<float32_t>(ByteStream* stream, const float32_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<float64_t>(ByteStream* stream, float64_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<float64_t>(ByteStream* stream, const float64_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<std::string>(ByteStream* stream, std::string *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<std::string>(ByteStream* stream, const std::string &val);
 
 	template<typename T>
 	bool read(ByteStream* stream, T *out, size_t count)
@@ -192,59 +258,14 @@ namespace Serialize
 		return true;
 	}
 
-	template<>
-	SERIALIZE_EXPORT bool read<uint8_t>(ByteStream* stream, uint8_t *out);
+	template<typename T>
+	T read(ByteStream* stream)
+	{
+		T out;
+		read(stream, &out);
 
-	template<>
-	SERIALIZE_EXPORT bool write<uint8_t>(ByteStream* stream, const uint8_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<uint16_t>(ByteStream* stream, uint16_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<uint16_t>(ByteStream* stream, const uint16_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<uint32_t>(ByteStream* stream, uint32_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<uint32_t>(ByteStream* stream, const uint32_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<int8_t>(ByteStream* stream, int8_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<int8_t>(ByteStream* stream, const int8_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<int16_t>(ByteStream* stream, int16_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<int16_t>(ByteStream* stream, const int16_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<int32_t>(ByteStream* stream, int32_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<int32_t>(ByteStream* stream, const int32_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<float32_t>(ByteStream* stream, float32_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<float32_t>(ByteStream* stream, const float32_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<float64_t>(ByteStream* stream, float64_t *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<float64_t>(ByteStream* stream, const float64_t &val);
-
-	template<>
-	SERIALIZE_EXPORT bool read<std::string>(ByteStream* stream, std::string *out);
-
-	template<>
-	SERIALIZE_EXPORT bool write<std::string>(ByteStream* stream, const std::string &val);
+		return out;
+	}
 }
 
 #endif // _SERIALIZE_H_

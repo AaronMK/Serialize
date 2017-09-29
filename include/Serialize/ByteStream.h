@@ -1,12 +1,14 @@
 #ifndef _SERIALIZE_BYTE_STREAM_H_
 #define _SERIALIZE_BYTE_STREAM_H_
 
-#include "Config.h"
+#include "Serialize.h"
 #include "Types.h"
 
 #include <type_traits>
+#include <exception>
 #include <string>
 #include <limits>
+#include <tuple>
 
 namespace Serialize
 {
@@ -15,8 +17,82 @@ namespace Serialize
 	 */
 	class SERIALIZE_EXPORT ByteStream
 	{
-	public:
+	private:
 
+		template<typename... tuple_types>
+		struct TupleReader
+		{
+			typedef std::tuple<tuple_types...> tuple_t;
+
+			ByteStream* mInStream;
+			tuple_t* mOutTuple;
+
+			template<size_t index>
+			void readIndex()
+			{
+				std::get<index>(*mOutTuple) =
+					mInStream->read<std::tuple_element<index, tuple_t>::type>();
+			}
+
+			template<size_t index>
+			void read()
+			{
+				readIndex<index>();
+				readIndex<index + 1>();
+			}
+
+			template<>
+			void read<sizeof...(tuple_types) - 1>()
+			{
+				readIndex<index>();
+			}
+
+			TupleReader(tuple_t* outTuple, ByteStream* inStream)
+			{
+				mInStream = inStream;
+				mOutTuple = outTuple;
+
+				read<0>();
+			}
+		};
+
+		template<typename... tuple_types>
+		struct TupleWriter
+		{
+			typedef std::tuple<tuple_types...> tuple_t;
+
+			ByteStream* mOutStream;
+			const tuple_t* mInTuple;
+
+			template<size_t index>
+			void writeIndex()
+			{
+				mOutStream->write(std::get<index>(*mInTuple));
+			}
+
+			template<size_t index>
+			void write()
+			{
+				writeIndex<index>();
+				writeIndex<index + 1>();
+			}
+
+			template<>
+			void write<sizeof...(tuple_types) - 1>()
+			{
+				writeIndex<index>();
+			}
+
+			TupleWriter(const tuple_t* inTuple, ByteStream* outStream)
+			{
+				mInTuple = inTuple;
+				mOutStream = outStream;
+
+				write<0>();
+			}
+		};
+
+	public:
 		/**
 		 * @brief
 		 *  Flags that are used to set and/or determine properties of a ByteStream.
@@ -76,29 +152,38 @@ namespace Serialize
 		 *  Gets a pointer to raw data at a seek position in the stream.  This does not
 		 *  actually seek the stream, and will only work if the data backing the stream
 		 *  is in memory.
+		 *
+		 * @details
+		 *  The default implementation will throw an InvalidOperation exception noting
+		 *  that the stream does not support direct addressing of underlying data.
 		 */
 		virtual void* dataPtr(seek_t seekPos) const;
 
 		/**
 		 * @brief
 		 *  Reads a block of raw data from the current seek position of the file.
-		 *  The seek position is moved by the number of bytes read.  If data is nullptr,
-		 *  the seek position is simply moved forward by byteLength.
+		 *  The seek position is moved by the number of bytes read.
+		 *
+		 * @details
+		 *  The default implementation will throw an InvalidOperation exception.
 		 */
-		virtual bool readRaw(void* destination, bytesize_t byteLength) = 0;
+		virtual void readRaw(void* destination, bytesize_t byteLength);
 
 		/**
 		 * @brief
 		 *  Writes raw data to the file. The seek position is moved
 		 *  by the number of bytes written.
+		 *
+		 * @details
+		 *  The default implementation will throw an InvalidOperation exception.
 		 */
-		virtual bool writeRaw(const void* data, bytesize_t byteLength) = 0;
+		virtual void writeRaw(const void* data, bytesize_t byteLength);
 
 		/**
 		 * @brief
 		 *  Seeks to the position in terms of number of bytes from the beginning.
 		 */
-		virtual bool seek(seek_t position) = 0;
+		virtual void seek(seek_t position) = 0;
 
 		/*
 		 * @brief
@@ -131,13 +216,40 @@ namespace Serialize
 		 * @brief
 		 *  For writable streams, clears all contents and resets the seek position to 0.
 		 */
-		virtual bool clear() = 0;
+		virtual void clear() = 0;
 
 		/*
 		 * @brief
 		 *  Gets the flags for common properties of ByteStreams.
 		 */
 		uint32_t getFlags() const;
+
+		template<typename T>
+		T read()
+		{
+			return Serialize::read<T>(this);
+		}
+
+		template<typename T>
+		void write(const T& value)
+		{
+			Serialize::write<T>(this, value);
+		}
+
+		template<typename... tuple_types>
+		std::tuple<tuple_types...> readTuple()
+		{
+			std::tuple<tuple_types...> outTuple;
+			TupleReader<tuple_types...> reader(&outTuple, this);
+
+			return outTuple;
+		}
+
+		template<typename... tuple_types>
+		void writeTuple(const std::tuple<tuple_types...>& outTuple)
+		{
+			TupleWriter<tuple_types...> writer(&outTuple, this);
+		}
 
 	protected:
 		void setFlags(uint32_t mask);
