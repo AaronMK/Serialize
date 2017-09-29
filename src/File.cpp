@@ -16,7 +16,6 @@ namespace Serialize
 	File::File()
 		: mFile(nullptr)
 	{
-
 	}
 
 	File::File(const char* path, bool readonly)
