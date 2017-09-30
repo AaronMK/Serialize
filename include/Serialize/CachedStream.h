@@ -3,7 +3,7 @@
 
 #include "ByteStream.h"
 
-namespace Resource
+namespace Serialize
 {
 	/**
 	 * Reads part of a stream into memory, presumably from a stream reading from disk, in
@@ -15,10 +15,13 @@ namespace Resource
 	 */
 	class SERIALIZE_EXPORT CachedStream : public ByteStream
 	{
+		CachedStream& operator=(const CachedStream&) = delete;
+
 	public:
 		/**
-		 * Creates an empty stream.  Only useful for situations where a default constructor is needed
-		 * and a real data will be set later.
+		 * @brief
+		 *  Creates an empty stream.  Only useful for situations where a default constructor is needed
+		 *  and a real data will be set later.
 		 */
 		CachedStream();
 
@@ -26,17 +29,19 @@ namespace Resource
 		 * @brief
 		 *  Move contructor
 		 */
-		CachedStream::CachedStream(CachedStream&& other)
+		CachedStream(CachedStream&& other);
 
 		/**
-		 * Creates a cached stream using the current seek position of the, and reading dataSize into
-		 * memory.  This will advance the passed stream.
+		 * @brief
+		 *  Creates a cached stream using the current seek position of the, and reading dataSize into
+		 *  memory.  This will advance the passed stream.
 		 */
 		CachedStream(ByteStream* stream, bytesize_t dataSize);
 
 		/**
-		 * Creates a cached stream by copying dataSize bytes at beginSeek in stream.  No advancement
-		 * of the passed stream will take place.
+		 * @brief
+		 *  Creates a cached stream by copying dataSize bytes at beginSeek in stream.  No advancement
+		 *  of the passed stream will take place.
 		 */
 		CachedStream(ByteStream* stream, seek_t beginSeek, bytesize_t dataSize);
 
@@ -45,20 +50,22 @@ namespace Resource
 		virtual void* dataPtr(seek_t seekPos) const override;
 
 		/**
-		 * Sets up the cached data in the same way as the corresponding constructor.  Any existing
-		 * cached data will be freed.
+		 * @brief
+		 *  Sets up the cached data in the same way as the corresponding constructor.  Any existing
+		 *  cached data will be freed.
 		 */
-		bool setCachedData(ByteStream* stream, seek_t beginSeek, bytesize_t dataSize);
+		void setCachedData(ByteStream* stream, seek_t beginSeek, bytesize_t dataSize);
 
-		virtual bool readRaw(void* destination, bytesize_t byteLength) override;
-		virtual bool writeRaw(const void* data, bytesize_t byteLength) override;
-		virtual bool seek(seek_t position) override;
+		virtual void readRaw(void* destination, bytesize_t byteLength) override;
+		virtual void seek(seek_t position) override;
 		virtual seek_t getSeekPosition() const override;
 		virtual bytesize_t bytesAvailable() const override;
 		virtual bool canRead(bytesize_t numBytes) override;
 		virtual bool canWrite(bytesize_t numBytes, bool autoExpand = false) override;
 
-		virtual bool clear() override;
+		virtual void clear() override;
+
+		CachedStream& operator=(CachedStream&& other);
 
 	private:
 		seek_t mSeekOffset;
