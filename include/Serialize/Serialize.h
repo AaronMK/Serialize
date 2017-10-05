@@ -225,37 +225,17 @@ namespace Serialize
 	SERIALIZE_EXPORT void write<std::string>(ByteStream* stream, const std::string &val);
 
 	template<typename T>
-	bool read(ByteStream* stream, T *out, size_t count)
+	void read(ByteStream* stream, T *out, size_t count)
 	{
-		seek_t backSeek = stream->getSeekPosition();
-
 		for (size_t i = 0; i < count; i++)
-		{
-			if (false == read<T>(stream, &out[i]))
-			{
-				stream->seek(backSeek);
-				return false;
-			}
-		}
-
-		return true;
+			read<T>(stream, &out[i]);
 	}
 
 	template<typename T>
-	bool write(ByteStream* stream, const T *vals, size_t count)
+	void write(ByteStream* stream, const T *vals, size_t count)
 	{
-		seek_t backSeek = stream->getSeekPosition();
-
 		for (size_t i = 0; i < count; i++)
-		{
-			if (false == write<T>(stream, vals[i]))
-			{
-				stream->seek(backSeek);
-				return false;
-			}
-		}
-
-		return true;
+			write<T>(stream, vals[i]);
 	}
 
 	template<typename T>
