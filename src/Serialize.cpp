@@ -57,6 +57,17 @@ namespace Serialize
 		stream->writeRaw(&val, sizeof(uint32_t));
 	}
 
+	template<>
+	void read<uint64_t>(ByteStream* stream, uint64_t *out)
+	{
+		stream->readRaw(out, sizeof(uint32_t));
+	}
+
+	template<>
+	void write<uint64_t>(ByteStream* stream, const uint64_t &val)
+	{
+		stream->writeRaw(&val, sizeof(uint32_t));
+	}
 
 	template<>
 	void read<int8_t>(ByteStream* stream, int8_t *out)
@@ -92,6 +103,18 @@ namespace Serialize
 	void write<int32_t>(ByteStream* stream, const int32_t &val)
 	{
 		stream->writeRaw(&val, sizeof(int32_t));
+	}
+
+	template<>
+	void read<int64_t>(ByteStream* stream, int64_t *out)
+	{
+		stream->readRaw(out, sizeof(int64_t));
+	}
+
+	template<>
+	void write<int64_t>(ByteStream* stream, const int64_t &val)
+	{
+		stream->writeRaw(&val, sizeof(int64_t));
 	}
 
 	template<>
@@ -137,4 +160,37 @@ namespace Serialize
 		write(stream, length);
 		stream->writeRaw(val.data(), length);
 	}
+
+	template<>
+	void Serialize::read(ByteStream* stream, StdExt::Buffer* out)
+	{
+		uint32_t length = read<uint32_t>(stream);
+
+		StdExt::Buffer bufferOut(length);
+		stream->readRaw(bufferOut.data(), length);
+
+		(*out) = std::move(bufferOut);
+	}
+
+	template<>
+	void Serialize::write(ByteStream* stream, const StdExt::Buffer& val)
+	{
+		uint32_t size = (uint32_t)val.size();
+
+		write<uint32_t>(stream, size);
+		stream->writeRaw(val.data(), size);
+	}
+
+	template<>
+	void read<StdExt::ConstString>(ByteStream* stream, StdExt::ConstString *out)
+	{
+		*out = StdExt::ConstString(read<std::string>(stream));
+	}
+
+	template<>
+	void write<StdExt::ConstString>(ByteStream* stream, const StdExt::ConstString &val)
+	{
+		write<std::string>(stream, val);
+	}
+
 }

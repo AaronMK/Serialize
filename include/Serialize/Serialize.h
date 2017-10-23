@@ -9,6 +9,8 @@
 #include <string>
 #include <tuple>
 
+#include <StdExt/Buffer.h>
+#include <StdExt/ConstString.h>
 
 /**
  * Adding Support for New Datatypes
@@ -189,6 +191,12 @@ namespace Serialize
 	SERIALIZE_EXPORT void write<uint32_t>(ByteStream* stream, const uint32_t &val);
 
 	template<>
+	SERIALIZE_EXPORT void read<uint64_t>(ByteStream* stream, uint64_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<uint64_t>(ByteStream* stream, const uint64_t &val);
+
+	template<>
 	SERIALIZE_EXPORT void read<int8_t>(ByteStream* stream, int8_t *out);
 
 	template<>
@@ -205,6 +213,12 @@ namespace Serialize
 
 	template<>
 	SERIALIZE_EXPORT void write<int32_t>(ByteStream* stream, const int32_t &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<int64_t>(ByteStream* stream, int64_t *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<int64_t>(ByteStream* stream, const int64_t &val);
 
 	template<>
 	SERIALIZE_EXPORT void read<float32_t>(ByteStream* stream, float32_t *out);
@@ -224,6 +238,34 @@ namespace Serialize
 	template<>
 	SERIALIZE_EXPORT void write<std::string>(ByteStream* stream, const std::string &val);
 
+	//////////////////////
+
+	template<>
+	SERIALIZE_EXPORT void read<StdExt::Buffer>(ByteStream* stream, StdExt::Buffer *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<StdExt::Buffer>(ByteStream* stream, const StdExt::Buffer &val);
+
+	template<>
+	SERIALIZE_EXPORT void read<StdExt::ConstString>(ByteStream* stream, StdExt::ConstString *out);
+
+	template<>
+	SERIALIZE_EXPORT void write<StdExt::ConstString>(ByteStream* stream, const StdExt::ConstString &val);
+
+	template<typename T>
+	auto readEnum(ByteStream* stream) -> typename std::underlying_type_t<T>
+	{
+		static_assert(std::is_enum_v<T>);
+		return (T)read<std::underlying_type_t<T>>(stream);
+	}
+
+	template<typename T>
+	void writeEnum(ByteStream* stream, T val)
+	{
+		static_assert(std::is_enum_v<T>);
+		write<std::underlying_type_t<T>>(stream);
+	}
+	
 	template<typename T>
 	void read(ByteStream* stream, T *out, size_t count)
 	{
