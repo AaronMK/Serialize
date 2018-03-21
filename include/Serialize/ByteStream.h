@@ -161,6 +161,18 @@ namespace Serialize
 
 		/**
 		 * @brief
+		 *  Either skips, or reads and ignores the specified number of bytes from the stream.
+		 *
+		 * @details
+		 *  The default implementation will attempt to seek the stream to skip the bytes.
+		 *  If that fails it will read the specified into a temporary buffer
+		 *  and delete that buffer. Implementations can override this behavior for better
+		 *  performance.
+		 */
+		virtual void skip(bytesize_t byteLength);
+
+		/**
+		 * @brief
 		 *  Reads a block of raw data from the current seek position of the file.
 		 *  The seek position is moved by the number of bytes read.
 		 *
@@ -182,14 +194,21 @@ namespace Serialize
 		/**
 		 * @brief
 		 *  Seeks to the position in terms of number of bytes from the beginning.
+		 *
+		 * @details
+		 *  The default implementation will throw an InvalidOperation exception.
 		 */
-		virtual void seek(seek_t position) = 0;
+		virtual void seek(seek_t position);
 
 		/*
 		 * @brief
-		 *  Gets the current seek position on which read and write operations will take place.
+		 *  Gets the current seek position on which read and write operations will take place,
+		 *  if applicable.
+		 *
+		 * @details
+		 *  The default implementation will throw an InvalidOperation exception.
 		 */
-		virtual seek_t getSeekPosition() const = 0;
+		virtual seek_t getSeekPosition() const;
 
 		/**
 		 * @brief
@@ -215,8 +234,11 @@ namespace Serialize
 		/**
 		 * @brief
 		 *  For writable streams, clears all contents and resets the seek position to 0.
+		 *
+		 * @details
+		 *  The default implementation will throw an InvalidOperation exception.
 		 */
-		virtual void clear() = 0;
+		virtual void clear();
 
 		/*
 		 * @brief

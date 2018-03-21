@@ -253,7 +253,7 @@ namespace Serialize
 	SERIALIZE_EXPORT void write<StdExt::ConstString>(ByteStream* stream, const StdExt::ConstString &val);
 
 	template<typename T>
-	auto readEnum(ByteStream* stream) -> typename std::underlying_type_t<T>
+	T readEnum(ByteStream* stream)
 	{
 		static_assert(std::is_enum_v<T>);
 		return (T)read<std::underlying_type_t<T>>(stream);
@@ -263,7 +263,7 @@ namespace Serialize
 	void writeEnum(ByteStream* stream, T val)
 	{
 		static_assert(std::is_enum_v<T>);
-		write<std::underlying_type_t<T>>(stream);
+		write<std::underlying_type_t<T>>(stream, (std::underlying_type_t<T>)val);
 	}
 	
 	template<typename T>
