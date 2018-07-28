@@ -182,15 +182,20 @@ namespace Serialize
 	}
 
 	template<>
-	void read<StdExt::ConstString>(ByteStream* stream, StdExt::ConstString *out)
+	void read<StdExt::String>(ByteStream* stream, StdExt::String *out)
 	{
-		*out = StdExt::ConstString(read<std::string>(stream));
+		uint32_t length = read<uint32_t>(stream);
+		StdExt::MemoryReference memRef(length);
+		stream->readRaw(memRef.data(), length);
+
+		*out = StdExt::String(std::move(memRef));
 	}
 
 	template<>
-	void write<StdExt::ConstString>(ByteStream* stream, const StdExt::ConstString &val)
+	void write<StdExt::String>(ByteStream* stream, const StdExt::String &val)
 	{
-		write<std::string>(stream, val);
+		std::string_view view(val);
+		write<uint32_t>(stream, view.length());
+		stream->writeRaw(view.data(), view.length());
 	}
-
 }

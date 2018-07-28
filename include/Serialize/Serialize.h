@@ -1,7 +1,7 @@
 #ifndef _SERIALIZE_H_
 #define _SERIALIZE_H_
 
-#include "Types.h"
+#include "Config.h"
 
 #include <type_traits>
 #include <exception>
@@ -10,7 +10,7 @@
 #include <tuple>
 
 #include <StdExt/Buffer.h>
-#include <StdExt/ConstString.h>
+#include <StdExt/String.h>
 
 /**
  * Adding Support for New Datatypes
@@ -112,6 +112,13 @@
  */
 namespace Serialize
 {
+	typedef float float32_t;
+	typedef double float64_t;
+
+	// Types to support bytestream metrics
+	typedef uint32_t seek_t;
+	typedef uint32_t bytesize_t;
+
 	class ByteStream;
 
 	/**
@@ -134,14 +141,10 @@ namespace Serialize
 	template<typename T>
 	void read(ByteStream* stream, T *out)
 	{
-		// Read needs to be specialized for the type.
-		assert(false);
-
-		// This function should generate a compile error of
-		// returning a value if the compiler ever tries
-		// use it, which would indicate no specialization
-		// being available.
-		return 1;
+		if constexpr (std::is_enum_v<T>)
+			*out = readEnum<T>(stream);
+		else
+			static_assert(false, "Serialize::read<T> needs to be specialized for the type T template parameter.");
 	}
 
 	/**
@@ -151,19 +154,16 @@ namespace Serialize
 	 *  read.  If unsuccessful, false is returned. If the stream
 	 *  has seeking support, is returned to its original seek position.
 	 *
-	 *  This function must be specialized for type support.  Otherwise, the default
-	 *  implementation will be compiled and generate an error.
+	 *  For non-enumeration types, this function must be specialized for type support.  
+	 *  Otherwise, the default implementation will generate a static assertion failure.
 	 */
 	template<typename T>
 	void write(ByteStream* stream, const T &val)
 	{
-		// Write needs to be specialized for the type.
-		assert(false);
-
-		// This function should generate a compile error of
-		// returning a value if the compiler ever tries
-		// use it, which would indicate no specialization
-		// being available.
+		if constexpr (std::is_enum_v<T>)
+			writeEnum<T>(stream, val);
+		else
+			static_assert(false, "Serialize::write<T> needs to be specialized for the type T template parameter.");
 	}
 
 	template<>
@@ -247,10 +247,10 @@ namespace Serialize
 	SERIALIZE_EXPORT void write<StdExt::Buffer>(ByteStream* stream, const StdExt::Buffer &val);
 
 	template<>
-	SERIALIZE_EXPORT void read<StdExt::ConstString>(ByteStream* stream, StdExt::ConstString *out);
+	SERIALIZE_EXPORT void read<StdExt::String>(ByteStream* stream, StdExt::String *out);
 
 	template<>
-	SERIALIZE_EXPORT void write<StdExt::ConstString>(ByteStream* stream, const StdExt::ConstString &val);
+	SERIALIZE_EXPORT void write<StdExt::String>(ByteStream* stream, const StdExt::String &val);
 
 	template<typename T>
 	T readEnum(ByteStream* stream)

@@ -2,7 +2,6 @@
 #define _SERIALIZE_BYTE_STREAM_H_
 
 #include "Serialize.h"
-#include "Types.h"
 
 #include <type_traits>
 #include <exception>
