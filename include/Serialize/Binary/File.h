@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	/**
 	 * File based ByteStream.
@@ -47,7 +47,7 @@ namespace Serialize
 		virtual bool canWrite(bytesize_t numBytes, bool autoExpand = false) override;
 		virtual void clear() override;
 
-		bool open(const char* path, bool readonly);
+		bool open(StdExt::String path, bool readonly);
 		void close();
 
 		bool isOpen();

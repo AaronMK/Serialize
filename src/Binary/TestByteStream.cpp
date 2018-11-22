@@ -1,9 +1,9 @@
-#include <Serialize/TestByteStream.h>
+#include <Serialize/Binary/TestByteStream.h>
 #include <Serialize/Exceptions.h>
 
 #include <algorithm>
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	TestByteStream::TestByteStream()
 		: mSeekPosition(0), mMaxSeek(0)

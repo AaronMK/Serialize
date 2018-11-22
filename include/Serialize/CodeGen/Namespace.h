@@ -1,7 +1,6 @@
 #ifndef _SERIALIZE_CODE_GEN_NAMESPACE_H_
 #define _SERIALIZE_CODE_GEN_NAMESPACE_H_
 
-#include "Node.h"
 #include "Documentation.h"
 
 #include <StdExt/String.h>
@@ -12,30 +11,22 @@
 namespace Serialize::CodeGen
 {
 	class NamespaceInternal;
-	
-	class Enumeration;
-	class Type;
+	class DocumentInternal;
 
-	class SERIALIZE_EXPORT Namespace : public Node
+	class SERIALIZE_EXPORT Namespace
 	{
+		friend class Document;
+		friend class NamespaceInternal;
+
 	public:
-		Namespace(const Namespace&) = default;
-		Namespace& operator=(const Namespace&) = default;
-
-		Namespace(const StdExt::String& name, Namespace* parent = nullptr);
-
-		virtual ~Namespace();
-
 		const StdExt::String& name() const;
-		Namespace* addNamespace(const StdExt::String& name);
+		Namespace getNamespace(const StdExt::String& name);
 
 		Documentation Docs;
 
-	protected:
-		virtual void setParent(Node* parent) override;
-
 	private:
-		std::shared_ptr<NamespaceInternal> mInternal;
+		std::shared_ptr<NamespaceInternal> mNamespaceInternal;
+		std::shared_ptr<DocumentInternal> mDocInternal;
 	};
 }
 

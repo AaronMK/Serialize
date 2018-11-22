@@ -5,7 +5,7 @@
 
 #include <StdExt/Buffer.h>
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	class SERIALIZE_EXPORT BufferedStream : public ByteStream
 	{

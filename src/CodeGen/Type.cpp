@@ -18,7 +18,6 @@ namespace Serialize::CodeGen
 	}
 
 	Type::Type(const StdExt::String& name)
-		: Node()
 	{
 		mShared = std::make_shared<TypeShared>();
 	}

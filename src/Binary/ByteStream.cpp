@@ -1,4 +1,4 @@
-#include <Serialize/ByteStream.h>
+#include <Serialize/Binary/ByteStream.h>
 #include <Serialize/Exceptions.h>
 
 #include <algorithm>
@@ -7,7 +7,8 @@
 
 using namespace std;
 
-namespace Serialize
+namespace Serialize::Binary
+
 {
 	ByteStream::ByteStream()
 	{
@@ -52,12 +53,12 @@ namespace Serialize
 		}
 	}
 
-	void ByteStream::readRaw(void * destination, bytesize_t byteLength)
+	void ByteStream::readRaw(void* destination, bytesize_t byteLength)
 	{
 		throw InvalidOperation("Stream does not support reading.");
 	}
 
-	void ByteStream::writeRaw(const void * data, bytesize_t byteLength)
+	void ByteStream::writeRaw(const void* data, bytesize_t byteLength)
 	{
 		throw InvalidOperation("Stream does not support writing.");
 	}

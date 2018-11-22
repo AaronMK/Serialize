@@ -3,7 +3,7 @@
 
 #include "ByteStream.h"
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	/**
 	 * @brief

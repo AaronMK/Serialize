@@ -1,8 +1,13 @@
 #include <Serialize/Serialize.h>
-#include <Serialize/ByteStream.h>
 #include <Serialize/Exceptions.h>
 
-namespace Serialize
+#include <Serialize/Binary/Binary.h>
+#include <Serialize/Binary/ByteStream.h>
+
+#include <StdExt/Number.h>
+#include "..\..\include\Serialize\Binary\Binary.h"
+
+namespace Serialize::Binary
 {
 	template<>
 	void read<bool>(ByteStream* stream, bool *out)
@@ -162,7 +167,16 @@ namespace Serialize
 	}
 
 	template<>
-	void Serialize::read(ByteStream* stream, StdExt::Buffer* out)
+	void write<std::string_view>(ByteStream* stream, const std::string_view &val)
+	{
+		uint32_t length = StdExt::Number::convert<uint32_t>(val.length());
+
+		write<uint32_t>(stream, length);
+		stream->writeRaw(val.data(), length);
+	}
+
+	template<>
+	void read<StdExt::Buffer>(ByteStream* stream, StdExt::Buffer* out)
 	{
 		uint32_t length = read<uint32_t>(stream);
 
@@ -173,7 +187,7 @@ namespace Serialize
 	}
 
 	template<>
-	void Serialize::write(ByteStream* stream, const StdExt::Buffer& val)
+	void write<StdExt::Buffer>(ByteStream* stream, const StdExt::Buffer& val)
 	{
 		uint32_t size = (uint32_t)val.size();
 
@@ -185,17 +199,34 @@ namespace Serialize
 	void read<StdExt::String>(ByteStream* stream, StdExt::String *out)
 	{
 		uint32_t length = read<uint32_t>(stream);
-		StdExt::MemoryReference memRef(length);
-		stream->readRaw(memRef.data(), length);
 
-		*out = StdExt::String(std::move(memRef));
+		if (length <= StdExt::String::SmallSize)
+		{
+			char buffer[StdExt::String::SmallSize];
+			stream->readRaw(buffer, length);
+
+			*out = StdExt::String(buffer, length);
+		}
+		else
+		{
+			StdExt::MemoryReference memRef(length + 1);
+			stream->readRaw(memRef.data(), length);
+
+			((char*)memRef.data())[length] = 0;
+
+			*out = StdExt::String(std::move(memRef));
+		}
 	}
 
 	template<>
 	void write<StdExt::String>(ByteStream* stream, const StdExt::String &val)
 	{
-		std::string_view view(val);
-		write<uint32_t>(stream, view.length());
-		stream->writeRaw(view.data(), view.length());
+		write<std::string_view>(stream, val.view());
+	}
+
+	template<>
+	void write<StdExt::StringLiteral>(ByteStream* stream, const StdExt::StringLiteral& val)
+	{
+		write<std::string_view>(stream, val.view());
 	}
 }

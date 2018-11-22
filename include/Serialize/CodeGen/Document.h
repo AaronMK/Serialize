@@ -1,8 +1,9 @@
 #ifndef _SERIALIZE_CODE_GEN_DOCUMENT_H_
 #define _SERIALIZE_CODE_GEN_DOCUMENT_H_
 
-#include "Node.h"
 #include "Namespace.h"
+#include "Enumeration.h"
+
 #include "Exceptions.h"
 
 #include <StdExt/InPlace.h>
@@ -14,19 +15,20 @@
 namespace Serialize::CodeGen
 {
 	class Type;
-	class Enumeration;
+	class DocumentInternal;
+	class NamespaceInternal;
+	class EnumerationInternal;
 
-	class SERIALIZE_EXPORT Document : public Node
+	class SERIALIZE_EXPORT Document
 	{
-		friend class DocumentParser;
 
+	public:
 		struct CppProps
 		{
 			StdExt::String IncludeGuard;
 			StdExt::String ExportPreProcessDefine;
 		};
 
-	public:
 		Document(const Document&) = delete;
 		Document& operator=(const Document&) = delete;
 
@@ -38,14 +40,17 @@ namespace Serialize::CodeGen
 
 		~Document();
 
-		Enumeration* addEnumeration(const StdExt::String& name);
-		Namespace* addNamespace(const StdExt::String& name);
-		Type* addType(const StdExt::String& name);
+		Namespace getNamespace(const StdExt::String& name);
+		Enumeration getEnumeration(const StdExt::String& name);
 
 		CppProps CPP;
 
 	private:
-		Namespace Root;
+		std::shared_ptr<DocumentInternal> mDocInternal;
+
+		std::map<StdExt::String, std::shared_ptr<NamespaceInternal>> mNamespaces;
+		std::map<StdExt::String, std::shared_ptr<EnumerationInternal>> mEnumerations;
 	};
 }
+
 #endif // !_SERIALIZE_CODE_GEN_DOCUMENT_H_

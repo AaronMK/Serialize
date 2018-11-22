@@ -20,9 +20,9 @@ namespace Serialize
 			return mName;
 		}
 
-		Type Field::type()
+		Type* Field::type()
 		{
-			// TODO: insert return statement here
+			return nullptr;
 		}
 	}
 }

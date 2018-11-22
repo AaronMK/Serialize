@@ -1,9 +1,9 @@
-#include <Serialize/MemoryStream.h>
+#include <Serialize/Binary/MemoryStream.h>
 #include <Serialize/Exceptions.h>
 
 using namespace std;
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	MemoryStream::MemoryStream()
 		: ByteStream()

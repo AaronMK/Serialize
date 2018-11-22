@@ -1,7 +1,7 @@
 #ifndef _SERIALIZE_BYTE_STREAM_H_
 #define _SERIALIZE_BYTE_STREAM_H_
 
-#include "Serialize.h"
+#include "Binary.h"
 
 #include <type_traits>
 #include <exception>
@@ -9,7 +9,7 @@
 #include <limits>
 #include <tuple>
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	/**
 	 * Base class for all data streams. 
@@ -248,13 +248,13 @@ namespace Serialize
 		template<typename T>
 		T read()
 		{
-			return Serialize::read<T>(this);
+			return Serialize::Binary::read<T>(this);
 		}
 
 		template<typename T>
 		void write(const T& value)
 		{
-			Serialize::write<T>(this, value);
+			Serialize::Binary::write<T>(this, value);
 		}
 
 		template<typename... tuple_types>

@@ -1,7 +1,6 @@
 #ifndef _SERIALIZE_CODE_GEN_TYPE_H_
 #define _SERIALIZE_CODE_GEN_TYPE_H_
 
-#include "Node.h"
 #include "Namespace.h"
 #include "Documentation.h"
 
@@ -31,7 +30,7 @@ namespace Serialize::CodeGen
 
 	class TypeShared;
 	
-	class SERIALIZE_EXPORT Type : public Node
+	class SERIALIZE_EXPORT Type
 	{
 	public:
 		Type(const StdExt::String& name, Namespace& namesapce);
@@ -45,7 +44,6 @@ namespace Serialize::CodeGen
 		Documentation Docs;
 
 	private:
-
 		std::shared_ptr<TypeShared> mShared;
 	};
 }

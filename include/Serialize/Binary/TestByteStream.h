@@ -3,7 +3,7 @@
 
 #include "ByteStream.h"
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	/**
 	 * A byte stream that does not actually write anything.  It can be used to determine

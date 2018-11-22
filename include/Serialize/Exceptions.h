@@ -5,6 +5,8 @@
 
 #include <stdexcept>
 
+#include <StdExt/String.h>
+
 namespace Serialize
 {
 	class FormatException : public std::runtime_error
@@ -19,6 +21,7 @@ namespace Serialize
 		FormatException();
 		FormatException(const char* message);
 		FormatException(const std::string& strMsg);
+		FormatException(const StdExt::String& strMsg);
 	};
 
 	///////////////////////////////////
@@ -29,6 +32,7 @@ namespace Serialize
 		InvalidOperation();
 		InvalidOperation(const char* message);
 		InvalidOperation(const std::string& message);
+		InvalidOperation(const StdExt::String& message);
 	};
 
 	///////////////////////////////////
@@ -44,54 +48,86 @@ namespace Serialize
 	/////////////////////////////////
 
 	inline FormatException::FormatException()
-		: runtime_error("Invalid data detected during serialization.")
-	{
-	}
-
-	inline FormatException::FormatException(const std::string& strMsg)
-		: runtime_error(strMsg)
+		: std::runtime_error("Invalid data detected during serialization.")
 	{
 	}
 
 	inline FormatException::FormatException(const char* message)
-		: runtime_error(message)
+		: std::runtime_error(message)
+	{
+	}
+
+	inline FormatException::FormatException(const std::string& strMsg)
+		: std::runtime_error(strMsg)
+	{
+	}
+
+	inline FormatException::FormatException(const StdExt::String& strMsg)
+		: std::runtime_error(strMsg.getNullTerminated().data())
 	{
 	}
 
 	//////////////////////////////////////
 
 	inline InvalidOperation::InvalidOperation()
-		: logic_error("An invalid operation was attempted.")
+		: std::logic_error("An invalid operation was attempted.")
 	{
 
 	}
 
 	inline InvalidOperation::InvalidOperation(const char* message)
-		: logic_error(message)
+		: std::logic_error(message)
 	{
 	}
 
 	inline InvalidOperation::InvalidOperation(const std::string& message)
-		: logic_error(message)
+		: std::logic_error(message)
+	{
+	}
+
+	inline InvalidOperation::InvalidOperation(const StdExt::String& message)
+		: std::logic_error(message.getNullTerminated().data())
 	{
 	}
 
 	//////////////////////////////////////
 
 	inline OutOfBounds::OutOfBounds()
-		: out_of_range("Reading, writing, or seeking outside the boundaries of the stream was attempted.")
+		: std::out_of_range("Reading, writing, or seeking outside the boundaries of the stream was attempted.")
 	{
 
 	}
 
 	inline OutOfBounds::OutOfBounds(const char* message)
-		: out_of_range(message)
+		: std::out_of_range(message)
 	{
 	}
 
 	inline OutOfBounds::OutOfBounds(const std::string& message)
-		: out_of_range(message)
+		: std::out_of_range(message)
 	{
+	}
+
+	namespace XML
+	{
+		class ElementNotFound : public FormatException
+		{
+		public:
+			ElementNotFound();
+			ElementNotFound(const StdExt::String& elmName);
+		};
+
+		//////////////////////////////////////
+
+		inline ElementNotFound::ElementNotFound()
+			: FormatException("Requested element was not found.")
+		{
+		}
+
+		inline ElementNotFound::ElementNotFound(const StdExt::String& elmName)
+			: FormatException("Requested element '" + elmName + "'was not found.")
+		{
+		}
 	}
 }
 

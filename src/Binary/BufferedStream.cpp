@@ -1,7 +1,7 @@
-#include <Serialize/BufferedStream.h>
+#include <Serialize/Binary/BufferedStream.h>
 #include <Serialize/Exceptions.h>
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	static const size_t BLOCK_SIZE = 256;
 

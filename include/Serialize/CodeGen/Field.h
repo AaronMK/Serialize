@@ -1,7 +1,6 @@
 #ifndef _SERIALIZE_CODE_GEN_FIELD_H_
 #define _SERIALIZE_CODE_GEN_FIELD_H_
 
-#include "Node.h"
 #include "Type.h"
 #include "Documentation.h"
 
@@ -14,14 +13,14 @@ namespace Serialize
 	{
 		class TypeInternal;
 
-		class SERIALIZE_EXPORT Field : public Node
+		class SERIALIZE_EXPORT Field
 		{
 		public:
 			Field(const StdExt::String& pName);
 			virtual ~Field();
 
 			StdExt::String name();
-			Type type();
+			Type* type();
 
 			bool isMutable;
 			Documentation Docs;

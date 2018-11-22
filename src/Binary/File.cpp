@@ -1,4 +1,4 @@
-#include <Serialize/File.h>
+#include <Serialize/Binary/File.h>
 #include <Serialize/Exceptions.h>
 
 #ifndef _CRT_SECURE_NO_WARNINGS
@@ -11,7 +11,7 @@
 
 using namespace std;
 
-namespace Serialize
+namespace Serialize::Binary
 {
 	File::File()
 		: mFile(nullptr)
@@ -40,7 +40,7 @@ namespace Serialize
 		if (0 == byteLength)
 			return;
 
-		if ((getFlags() | WRITE_ONLY) != 0)
+		if ((getFlags() & WRITE_ONLY) != 0)
 			throw OutOfBounds();
 
 		if (nullptr == mFile)
@@ -63,13 +63,13 @@ namespace Serialize
 		if (nullptr == mFile)
 			throw InvalidOperation("Attempting to write on an unopened file.");
 
-		if ((getFlags() | READ_ONLY) != 0)
+		if ((getFlags() & READ_ONLY) != 0)
 			throw InvalidOperation("Attempting to write on a read only stream.");
 
 		size_t byteCount = byteLength;
 		size_t elementsWritten = fwrite(data, byteCount, 1, mFile);
 
-		if (elementsWritten != byteCount)
+		if (elementsWritten != 1)
 		{
 			if (0 != feof(mFile))
 				throw OutOfBounds("Attempted to write passed the end of the file.");
@@ -137,13 +137,13 @@ namespace Serialize
 
 	bool File::canWrite(bytesize_t numBytes, bool autoExpand)
 	{
-		return ( 0 == ( getFlags() | READ_ONLY) );
+		return ( 0 == ( getFlags() & READ_ONLY) );
 	}
 
 
 	void File::clear()
 	{
-		if (0 != (getFlags() | READ_ONLY))
+		if (0 != (getFlags() & READ_ONLY))
 			throw InvalidOperation("Attampting to clear a read-only file stream.");
 
 		if ( nullptr != mFile )
@@ -155,24 +155,26 @@ namespace Serialize
 		}
 	}
 
-	bool File::open(const char* path, bool readonly)
+	bool File::open(StdExt::String path, bool readonly)
 	{
+		StdExt::String ntPath = path.getNullTerminated();
+
 		if (nullptr != mFile)
 			return false;
 
 		if (readonly)
 		{
 			setFlags(READ_ONLY | CAN_SEEK);
-			fopen_s(&mFile, path, "rb");
+			fopen_s(&mFile, ntPath.data(), "rb");
 		}
 		else
 		{
 			setFlags(CAN_SEEK);
 
-			if ( exists(path) )
-				fopen_s(&mFile, path, "rb+");
+			if ( exists(ntPath.data()) )
+				fopen_s(&mFile, ntPath.data(), "rb+");
 			else
-				fopen_s(&mFile, path, "ab+");
+				fopen_s(&mFile, ntPath.data(), "ab+");
 		}
 
 		if (mFile == nullptr)

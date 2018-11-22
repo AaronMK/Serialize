@@ -18,6 +18,7 @@ namespace Serialize::CodeGen
 		{
 			Documentation Docs;
 			std::string Name;
+			int32_t value;
 		};
 
 		Enumeration(const StdExt::String& name);
@@ -27,5 +28,6 @@ namespace Serialize::CodeGen
 		std::list<Option> Options;
 	};
 }
+
 
 #endif // !_SERIALIZE_CODE_GEN_ENUMERATION_H_

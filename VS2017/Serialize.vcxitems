@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{463f701d-54fb-45c5-9b14-285e16747c70}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\Binary.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\BufferedStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\ByteStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\File.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\MemoryStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\TestByteStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Document.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Documentation.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Enumeration.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Exceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Field.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Namespace.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Type.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Exceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Serialize.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\XML\CoreTypes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\XML\Element.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\XML\XML.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\DocumentInternal.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\EnumerationInternal.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\NamespaceInternal.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\StringLiterals.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\TypeShared.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\TinyXml2\tinyxml2.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\XML\ElementInternal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\Binary.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\BufferedStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\ByteStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\File.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\MemoryStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\TestByteStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Document.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Documentation.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Enumeration.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Field.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Namespace.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Type.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\TinyXml2\tinyxml2.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\XML\CoreTypes.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\XML\Element.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\XML\ElementInternal.cpp" />
+  </ItemGroup>
+</Project>

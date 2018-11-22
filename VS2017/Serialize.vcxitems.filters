@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{b13ec4f1-80a8-436a-b4da-a6ddcd4cea11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Binary">
+      <UniqueIdentifier>{30e02abf-77fc-42da-b37f-c0dd07cdcd36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\CodeGen">
+      <UniqueIdentifier>{1aec6f3a-65f5-402f-87c1-13451b430d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\XML">
+      <UniqueIdentifier>{f9a98670-61b1-4948-b891-29f289d6394a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{3ab45c2b-daed-4e19-9698-ffb67a5e10e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Binary">
+      <UniqueIdentifier>{26c3f0e3-486d-4448-adc6-e1646f9b85b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\CodeGen">
+      <UniqueIdentifier>{a982030e-a5af-402b-b701-3c04c26d653f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TinyXml2">
+      <UniqueIdentifier>{f0e97951-4903-462f-a573-fda35bd88e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\XML">
+      <UniqueIdentifier>{5b56d9a0-4ee7-4c99-b921-397581ca298d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\Binary.h">
+      <Filter>include\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\BufferedStream.h">
+      <Filter>include\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\ByteStream.h">
+      <Filter>include\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\File.h">
+      <Filter>include\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\MemoryStream.h">
+      <Filter>include\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Binary\TestByteStream.h">
+      <Filter>include\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Document.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Documentation.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Enumeration.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Exceptions.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Field.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Namespace.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\Type.h">
+      <Filter>include\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Exceptions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Serialize.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\NamespaceInternal.h">
+      <Filter>src\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\TypeShared.h">
+      <Filter>src\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\TinyXml2\tinyxml2.h">
+      <Filter>src\TinyXml2</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\XML\XML.h">
+      <Filter>include\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\XML\Element.h">
+      <Filter>include\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\XML\ElementInternal.h">
+      <Filter>src\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\XML\CoreTypes.h">
+      <Filter>include\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\StringLiterals.h">
+      <Filter>src\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\DocumentInternal.h">
+      <Filter>src\CodeGen</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\EnumerationInternal.h">
+      <Filter>src\CodeGen</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\Binary.cpp">
+      <Filter>src\Binary</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\BufferedStream.cpp">
+      <Filter>src\Binary</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\ByteStream.cpp">
+      <Filter>src\Binary</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\File.cpp">
+      <Filter>src\Binary</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\MemoryStream.cpp">
+      <Filter>src\Binary</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\TestByteStream.cpp">
+      <Filter>src\Binary</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Document.cpp">
+      <Filter>src\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Documentation.cpp">
+      <Filter>src\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Enumeration.cpp">
+      <Filter>src\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Field.cpp">
+      <Filter>src\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Namespace.cpp">
+      <Filter>src\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CodeGen\Type.cpp">
+      <Filter>src\CodeGen</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\TinyXml2\tinyxml2.cpp">
+      <Filter>src\TinyXml2</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\XML\Element.cpp">
+      <Filter>src\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\XML\ElementInternal.cpp">
+      <Filter>src\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\XML\CoreTypes.cpp">
+      <Filter>src\XML</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

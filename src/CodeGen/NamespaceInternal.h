@@ -3,6 +3,9 @@
 
 #include <StdExt/String.h>
 
+#include <Serialize/XML/XML.h>
+#include <Serialize/XML/Element.h>
+
 #include <memory>
 #include <map>
 
@@ -11,19 +14,12 @@ namespace Serialize::CodeGen
 	class NamespaceInternal final
 	{
 	public:
-		using Reference = std::shared_ptr<NamespaceInternal>;
-
-		NamespaceInternal(const StdExt::String& name);
-		~NamespaceInternal();
-
-		NamespaceInternal* parent;
-
+		StdExt::String FullName;
 		StdExt::String Name;
 		Documentation Docs;
 
-		std::map<StdExt::String, Reference> Namespaces;
-
-		Reference findNamespace(const StdExt::String& name);
+		std::map<StdExt::String, std::shared_ptr<NamespaceInternal>> Namespaces;
+		std::weak_ptr<NamespaceInternal> Parent;
 	};
 }
 
