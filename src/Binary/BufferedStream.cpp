@@ -1,5 +1,6 @@
 #include <Serialize/Binary/BufferedStream.h>
 #include <Serialize/Exceptions.h>
+#include "..\..\include\Serialize\Binary\BufferedStream.h"
 
 namespace Serialize::Binary
 {
@@ -82,5 +83,19 @@ namespace Serialize::Binary
 		mBuffer.resize(0);
 		mSeekPosition = 0;
 		mBytesWritten = 0;
+	}
+
+	void* BufferedStream::expandForWrite(bytesize_t byteLength)
+	{
+		if (mSeekPosition + byteLength >= mBuffer.size())
+			mBuffer.resize((mSeekPosition + byteLength) / BLOCK_SIZE + BLOCK_SIZE);
+		
+		void* ret = (char*)mBuffer.data() + mSeekPosition;
+		mSeekPosition += byteLength;
+
+		if (mBytesWritten <= mSeekPosition)
+			mBytesWritten = mSeekPosition;
+
+		return ret;
 	}
 }

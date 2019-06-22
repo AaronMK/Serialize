@@ -19,7 +19,7 @@
  * ------------------
  *
  * To add serialization support for new types, add specializations
- * read<T>() and write<T>() into the Serialize namespace.
+ * read<T>() and write<T>() into the Serialize::Binary namespace.
  * These functions can simply utilize Bytestream::readRaw()
  * and Bytestream::writeRaw(), but they can also chain other read and write
  * specializations.  Take the following types for example:
@@ -118,8 +118,8 @@ namespace Serialize::Binary
 	using float64_t = StdExt::float64_t;
 
 	// Types to support bytestream metrics
-	typedef uint32_t seek_t;
-	typedef uint32_t bytesize_t;
+	using seek_t = uint32_t;
+	using bytesize_t = uint32_t;
 
 	class ByteStream;
 

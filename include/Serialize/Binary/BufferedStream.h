@@ -23,6 +23,14 @@ namespace Serialize::Binary
 		virtual bool canWrite(bytesize_t numBytes, bool autoExpand = false) override;
 		virtual void clear() override;
 
+		/**
+		 * @brief
+		 *  Expands the internal buffer for direct writing to the stream, returning a pointer
+		 *  to the caller to use in the actual writing of the data. This can
+		 *  be used to avoid temporary buffers.
+		 */
+		void* expandForWrite(bytesize_t byteLength);
+
 	private:
 		StdExt::Buffer mBuffer;
 		seek_t mBytesWritten;
