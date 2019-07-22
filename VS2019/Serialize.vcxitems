@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{6436c889-50eb-4687-a260-f614918f2e53}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\BufferedStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\ByteStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CachedStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Exceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\File.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\MemoryStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\ProxyStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Serialize.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\TestByteStream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\Types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\private_include\Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\BufferedStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\ByteStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\CachedStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\File.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\MemoryStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\ProxyStream.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Serialize.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\src\TestByteStream.cpp" />
+  </ItemGroup>
+</Project>
