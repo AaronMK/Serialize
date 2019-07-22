@@ -10,7 +10,7 @@
 #include <tuple>
 
 #include <StdExt/Buffer.h>
-#include <StdExt/ConstString.h>
+#include <StdExt/String.h>
 
 /**
  * Adding Support for New Datatypes
@@ -247,10 +247,10 @@ namespace Serialize
 	SERIALIZE_EXPORT void write<StdExt::Buffer>(ByteStream* stream, const StdExt::Buffer &val);
 
 	template<>
-	SERIALIZE_EXPORT void read<StdExt::ConstString>(ByteStream* stream, StdExt::ConstString *out);
+	SERIALIZE_EXPORT void read<StdExt::String>(ByteStream* stream, StdExt::String* out);
 
 	template<>
-	SERIALIZE_EXPORT void write<StdExt::ConstString>(ByteStream* stream, const StdExt::ConstString &val);
+	SERIALIZE_EXPORT void write<StdExt::String>(ByteStream* stream, const StdExt::String& val);
 
 	template<typename T>
 	T readEnum(ByteStream* stream)
