@@ -7,8 +7,9 @@
 #include <Serialize/XML/Element.h>
 #include <Serialize/XML/CoreTypes.h>
 
-#include "StringLiterals.h"
+#include <StdExt/Exceptions.h>
 
+#include "StringLiterals.h"
 #include "NamespaceInternal.h"
 
 using namespace std;
@@ -30,7 +31,23 @@ namespace Serialize::CodeGen
 			{
 				if (childElement.name() == slNamespace)
 				{
-					childElement.getAttribute<String>(slName);
+					String strNamespace = childElement.getAttribute<String>(slName);
+
+					auto itr = mNamespaces.find(strNamespace);
+					shared_ptr<NamespaceInternal> nsInternal;
+
+					if (itr == mNamespaces.end())
+					{
+						nsInternal = make_shared<NamespaceInternal>();
+						nsInternal->FullName = strNamespace;
+						nsInternal->Name = strNamespace;
+
+						mNamespaces[strNamespace] = nsInternal;
+					}
+					else
+					{
+						nsInternal = itr->second;
+					}
 				}
 			}
 		);
@@ -63,5 +80,10 @@ namespace Serialize::CodeGen
 		nsReturn.mDocInternal = mDocInternal;
 
 		return nsReturn;
+	}
+
+	Enumeration Document::getEnumeration(const StdExt::String& name)
+	{
+		throw StdExt::not_implemented();
 	}
 }
