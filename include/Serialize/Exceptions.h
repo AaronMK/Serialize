@@ -15,7 +15,7 @@ namespace Serialize
 		template<typename T>
 		static FormatException ForType()
 		{
-			return FormatException(std::string("Invalid data when reading " + typeid(T).name() + "."));
+			return FormatException(std::string("Invalid data when reading ") + typeid(T).name() + ".");
 		}
 
 		FormatException();

@@ -53,4 +53,16 @@ namespace Serialize::CodeGen
 	};
 }
 
+namespace Serialize
+{
+	namespace XML
+	{
+		template<>
+		SERIALIZE_EXPORT void read(const Element& element, Serialize::CodeGen::Document::CppProps* out);
+
+		template<>
+		SERIALIZE_EXPORT void write(Element& element, const Serialize::CodeGen::Document::CppProps& val);
+	}
+}
+
 #endif // !_SERIALIZE_CODE_GEN_DOCUMENT_H_

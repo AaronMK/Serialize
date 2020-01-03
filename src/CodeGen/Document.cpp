@@ -87,3 +87,29 @@ namespace Serialize::CodeGen
 		throw StdExt::not_implemented();
 	}
 }
+
+namespace Serialize
+{
+	namespace XML
+	{
+		using StringLiteral = StdExt::StringLiteral;
+
+		static const StringLiteral slIncludeGuard("IncludeGuard");
+		static const StringLiteral slExportPreProcessDefine("ExportPreProcessDefine");
+
+		template<>
+		void read(const Element& element, Serialize::CodeGen::Document::CppProps* out)
+		{
+			element.getChild<StdExt::String>(slIncludeGuard, &out->IncludeGuard);
+			element.getChild<StdExt::String>(slExportPreProcessDefine, &out->ExportPreProcessDefine);
+			return SERIALIZE_EXPORT void();
+		}
+
+		template<>
+		void write(Element& element, const Serialize::CodeGen::Document::CppProps& val)
+		{
+			element.addChild<StdExt::String>(slIncludeGuard, val.IncludeGuard);
+			element.addChild<StdExt::String>(slExportPreProcessDefine, val.ExportPreProcessDefine);
+		}
+	}
+}

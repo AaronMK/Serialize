@@ -6,6 +6,8 @@
 
 #include <StdExt/InPlace.h>
 
+#include <Serialize/XML/Element.h>
+
 #include <string>
 #include <memory>
 
@@ -46,6 +48,24 @@ namespace Serialize::CodeGen
 	private:
 		std::shared_ptr<TypeShared> mShared;
 	};
+}
+
+namespace Serialize::XML
+{
+	namespace Text
+	{
+		template<>
+		SERIALIZE_EXPORT void read<Serialize::CodeGen::CoreType>(const StdExt::String& string, Serialize::CodeGen::CoreType* out);
+
+		template<>
+		SERIALIZE_EXPORT StdExt::String write<Serialize::CodeGen::CoreType>(const Serialize::CodeGen::CoreType& val);
+	}
+
+	template<>
+	SERIALIZE_EXPORT void read(const Element& element, Serialize::CodeGen::CoreType* out);
+
+	template<>
+	SERIALIZE_EXPORT void write(Element& element, const Serialize::CodeGen::CoreType& val);
 }
 
 #endif // !_SERIALIZE_CODE_GEN_TYPE_H_

@@ -81,9 +81,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\NamespaceInternal.h">
       <Filter>src\CodeGen</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\TypeShared.h">
-      <Filter>src\CodeGen</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\src\TinyXml2\tinyxml2.h">
       <Filter>src\TinyXml2</Filter>
     </ClInclude>
@@ -108,6 +105,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\EnumerationInternal.h">
       <Filter>src\CodeGen</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\CoreType.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\TypeInternal.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\Binary.cpp">
