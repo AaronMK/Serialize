@@ -105,8 +105,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\EnumerationInternal.h">
       <Filter>src\CodeGen</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\include\Serialize\CodeGen\CoreType.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\TypeInternal.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\src\CodeGen\TypeShared.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\src\Binary\Binary.cpp">
