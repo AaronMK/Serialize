@@ -10,7 +10,7 @@ namespace Serialize
 		uint8_t numVal;
 		stream->readRaw(&numVal, sizeof(numVal));
 
-		if (0 != numVal || 1 != numVal)
+		if (0 != numVal && 1 != numVal)
 			throw FormatException("Boolean should have serialized value of either 0 or 1.");
 	}
 
